@@ -1,0 +1,30 @@
+id, isPlant, name, class,  category, tribes, strength, health, traits, effects, desc, isSignature
+1, 1, big-chill, smarty, trick, -, -1, -1, -, freeze|draw, freeze a zombie. draw a card, 0
+2, 1, whirlwind, smarty, trick, -, -1, -1, -, bounce, bounce a random zombie, 0
+3, 1, embiggen, mega-grow, trick, -, -1, -1, -, -, a plant gets +2/+2, 0
+4, 1, precision-blast, mega-grow|smarty, trick, pea, -1, -1, -, -, attack for 5 damage in the middle lane, 1
+5, 1, weed-whack, solar, trick, root, -1, -1, -, -, a zombie gets -2/-2, 0
+6, 1, more-spore, kabloom, trick, mushroom, -1, -1, -, make, make two button mushrooms in random lanes, 0
+7, 1, scorched-earth, solar, trick, -, -1, -1, -, -, all zombies on the ground get -1/-1, 0
+8, 1, sunburn, kabloom|solar, trick, flower, -1, -1, -, -, do 2 damage. you get +1 sun for the rest of the game, 1
+9, 1, geyser, solar, trick, -, -1, -1, -, heal, heal your hero and all plants for 4, 0
+10, 1, nut-signal, guardian, trick, nut, -1, -1, -, make, make a wall-nut. draw a card, 0
+11, 1, bubble-up, guardian, trick, -, -1, -1, team-up, move, move a plant. it gets +4 hp and team-up, 0
+12, 1, uncrackable, guardian|solar, trick, nut, -1, -1, -, shield, your hero gets shield this turn. draw a card, 1
+13, 1, holo-flora, mega-grow, trick, -, -1, -1, -, draw, draw two cards, 0
+14, 1, devour, mega-grow|solar, trick, flytrap, -1, -1, -, destroy, destroy a zombie with the lowest hp, 1
+15, 1, storm-front, kabloom, trick, -, -1, -1, -, -, all plants get +1/+1, 0
+16, 1, meteor-strike, kabloom, trick, -, -1, -1, -, -, do 3 damage to a zombie, 0
+17, 1, tater-toss, kabloom|guardian, trick, root, -1, -1, -, make, make a hothead, 1
+18, 1, transmogrify, smarty, trick, -, -1, -1, -, transform, transform a zombie into a random zombie that cost 1, 0
+19, 1, root-wall, guardian, trick, root, -1, -1, -, shield, a plant gets +2 hp and shield, 0
+20, 1, peel-shield, guardian|smarty, trick, fruit, -1, -1, -, shield, plants get shield this turn, 1
+21, 1, time-to-shine, mega-grow, trick, -, -1, -1, -, bonus-attack, a plant does a bonus attack, 0
+22, 1, power-pummel, mega-grow, trick, leafy, -1, -1, -, -, attack each zombie on the ground for 2 damage, 1
+23, 1, mush-boom, kabloom|smarty, trick, mushroom, -1, -1, -, make, make a poison mushroom. do 2 damage to a zombie here, 1
+24, 1, goatify, smarty|solar, trick, flower, -1, -1, -, transform, transform a zombie with the highest str into a goat, 1
+25, 1, blazing-bark, kabloom|mega-grow, trick, tree, -1, -1, -, -, a plant gets +4 str, 1
+26, 1, ensign-uproot, guardian, fighter, root, 2, 1, amphibious, move, when played: move another plant or zombie, 0
+27, 1, lieutenant-carrotron, smarty, fighter, root, 2, 1, team-up, conjure, conjure a root, 0
+28, 1, lightspeed-seed, smarty, trick, seed, -1, -1, -, conjure, conjure two tricks, 0
+29, 1, genetic-amplification, guardian|smarty, trick, root, -1, -1, amphibious|team-up, conjure, conjure a plant. it gets +2/+1. amphibious. team-up, 1
