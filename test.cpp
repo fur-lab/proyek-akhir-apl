@@ -12,5 +12,7 @@ void tampilMenu (string judul, const string opsi[], int jumlah) {
 
 int main() {
     tampilMenu("Daftar Rarity: ", RARITY, 6);
+    Card c;
+    
     return 0;
 }

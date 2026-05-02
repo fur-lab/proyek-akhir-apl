@@ -29,6 +29,26 @@ const string GLOBAL_TRAITS[] = {"amphibious","anti-hero","armored","bullseye","h
 const string EFFECTS[]       = {"bonus-attack","bounce","conjure","destroy", "dino-roar", "draw",
                                   "evolution", "freeze", "fusion","heal","make","move","shield","shuffle","transform"};
 
+struct CardTags {
+    vector <string> tribes;
+    vector<string> traits;
+    vector<string> effects;
+    string desc;
+};
+
+struct Card {
+    int      id;
+    string   name;
+    string   team;        
+    string   cardClass;   
+    string   category;    
+    int      cost;
+    int      strength;    
+    string   rarity;
+    string   cardSet;     
+    CardTags tags;
+};
+
 extern vector<Akun> List_Akun;
 extern bool Menu_Login;
 extern string Input_Username;
