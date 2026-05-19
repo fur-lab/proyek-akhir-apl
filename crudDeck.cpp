@@ -192,13 +192,13 @@ void tambahDek(vector<Deck>& decks, vector<Hero>& heroes,
         }
 
         Card kartuTerpilih = kartuTersedia[pilihKartu - 1];
-        int qty = readInt("  Masukkan jumlah (1-4): ");
+        int qty = readInt("  Masukkan jumlah (1-4): ",1,4);
 
-        if (qty < 1 || qty > 4) {
-            cout << "  [!] Masukkan jumlah antara 1-4!\n";
-            tungguEnter();
-            continue;
-        }
+        // if (qty < 1 || qty > 4) {
+        //     cout << "  [!] Masukkan jumlah antara 1-4!\n";
+        //     tungguEnter();
+        //     continue;
+        // }
 
         if (totalKartu + qty > 40) {
             cout << "  [!] Slot tidak cukup (Sisa: " << (40 - totalKartu) << ").\n";
@@ -247,6 +247,119 @@ void tambahDek(vector<Deck>& decks, vector<Hero>& heroes,
         << newDeck.status << " (" << totalKartu << "/40 kartu)!\n";
     tungguEnter();
     clear();
+}
+
+void tambahKartuDek(Deck* deckPtr, vector<Hero>& heroes, vector<Card>& plants, vector<Card>& zombies) {
+    int totalBaru = 0;
+    for (auto& c : deckPtr->cards) {
+        totalBaru += c.qty;
+    }
+
+    // Cek apakah deck sudah penuh
+    if (totalBaru >= 40) {
+        cout << "  [!] Dek sudah penuh (40/40). Tidak bisa tambah kartu lagi!\n";
+        tungguEnter();
+        return;
+    }
+
+    // Ambil Hero untuk filter class
+    Hero* heroRef = nullptr;
+    for(auto& h : heroes) if(h.id == deckPtr->heroId) heroRef = &h;
+    
+    if (heroRef == nullptr) {
+        cout << "  [!] Hero tidak ditemukan!\n";
+        tungguEnter();
+        return;
+    }
+    
+    vector<string> hClasses = splitPipe(heroRef->classes);
+    vector<Card>& pool = deckPtr->isPlant ? plants : zombies;
+    vector<Card> tersedia;
+    for (auto& c : pool) {
+        for (auto& cls : hClasses) {
+            if (c.cardClass == cls) { tersedia.push_back(c); break; }
+        }
+    }
+
+    while (totalBaru < 40) {
+        clear();
+        cout << "  Mengisi Ulang Dek: " << deckPtr->deckName << "\n";
+        cout << "  Jumlah Kartu: " << totalBaru << "/40\n\n";
+
+        // Tampilkan kartu yang sudah ada di deck
+        cout << "=== ISI DEK SAAT INI ===\n";
+        if (deckPtr->cards.empty()) {
+            cout << "  (Dek masih kosong)\n\n";
+        } else {
+            vector<string> hIsi = {"ID", "Nama Kartu", "Qty"};
+            vector<vector<string>> rIsi;
+            for (auto& dc : deckPtr->cards) {
+                string nama = getNamaKartu(plants, zombies, dc.cardId, deckPtr->isPlant);
+                rIsi.push_back({to_string(dc.cardId), nama, to_string(dc.qty)});
+            }
+            printTable(hIsi, rIsi);
+            cout << "\n";
+        }
+
+        // Tampilkan kartu tersedia
+        cout << "=== KARTU TERSEDIA ===\n";
+        vector<string> hK = {"No", "Nama Kartu", "Class", "Cost"};
+        vector<vector<string>> rK;
+        for (int i = 0; i < (int)tersedia.size(); i++) {
+            rK.push_back({to_string(i + 1), tersedia[i].name, tersedia[i].cardClass, to_string(tersedia[i].cost)});
+        }
+        printTable(hK, rK);
+
+        // Input pilihan kartu
+        cout << "  [0] Selesai & Simpan\n";
+        int kartuPilih = readInt("  Pilih nomor kartu: ");
+        if (kartuPilih == 0) break;
+        
+        if (kartuPilih < 1 || kartuPilih > (int)tersedia.size()) {
+            cout << "  [!] Nomor tidak valid.\n";
+            tungguEnter();
+            continue;
+        }
+
+        int qty = readInt("  Masukkan jumlah (1-4): ", 1, 4);
+
+        if (totalBaru + qty > 40) {
+            cout << "  [!] Slot tidak cukup!\n";
+            tungguEnter();
+            continue;
+        }
+
+        // Cek duplikat dan tambah kartu
+        bool ketemu = false;
+        for (auto& existingCard : deckPtr->cards) {
+            if (existingCard.cardId == tersedia[kartuPilih-1].id) {
+                if (existingCard.qty + qty > 4) {
+                    cout << "  [!] Maksimal 4 kartu sejenis per dek.\n";
+                    ketemu = true;
+                    break;
+                }
+                existingCard.qty += qty;
+                totalBaru += qty;
+                cout << "  [+] '" << tersedia[kartuPilih-1].name << "' ditambah " << qty 
+                    << ". Total jenis ini: " << existingCard.qty << "\n";
+                ketemu = true;
+                break;
+            }
+        }
+        
+        // Jika belum ada, tambah kartu baru
+        if (!ketemu) {
+            deckPtr->cards.push_back({tersedia[kartuPilih-1].id, qty});
+            totalBaru += qty;
+            cout << "  [+] '" << tersedia[kartuPilih-1].name << "' ditambahkan (" << qty << " kartu).\n";
+        }
+        
+        tungguEnter();
+    }
+
+    // Set status deck
+    deckPtr->status = (totalBaru == 40) ? "final" : "draft";
+    cout << "  [+] Isi dek berhasil diperbarui!\n";
 }
 
 void hapusKartuDariDek(Deck* d, vector<Card>& plants, vector<Card>& zombies) {
@@ -391,105 +504,9 @@ void editDek(vector<Deck>& decks, vector<Hero>& heroes,
             break;
         }
         case 2: {
-            // Edit isi kartu
-            int totalBaru = 0;
-            for (auto& c : deckTerpilih->cards) {
-                totalBaru += c.qty;
-            }
-
-            if (totalBaru >= 40) {
-                cout << "  [!] Dek sudah penuh (40/40). Tidak bisa tambah kartu lagi!\n";
-                break;
-            }
-
-            // Ambil Hero untuk filter class kembali
-            Hero* heroRef = nullptr;
-            for(auto& h : heroes) if(h.id == deckTerpilih->heroId) heroRef = &h;
-            
-            vector<string> hClasses = splitPipe(heroRef->classes);
-            vector<Card>& pool = deckTerpilih->isPlant ? plants : zombies;
-            vector<Card> tersedia;
-            for (auto& c : pool) {
-                for (auto& cls : hClasses) {
-                    if (c.cardClass == cls) { tersedia.push_back(c); break; }
-                }
-            }
-
-            while (totalBaru < 40) {
-                clear();
-                cout << "  Mengisi Ulang Dek: " << deckTerpilih->deckName << "\n";
-                cout << "  Jumlah Kartu: " << totalBaru << "/40\n\n";
-
-                cout << "=== ISI DEK SAAT INI ===\n";
-                if (deckTerpilih->cards.empty()) {
-                    cout << "  (Dek masih kosong)\n\n";
-                } else {
-                    vector<string> hIsi = {"ID", "Nama Kartu", "Qty"};
-                    vector<vector<string>> rIsi;
-                    for (auto& dc : deckTerpilih->cards) {
-                        string nama = getNamaKartu(plants, zombies, dc.cardId, deckTerpilih->isPlant);
-                        rIsi.push_back({to_string(dc.cardId), nama, to_string(dc.qty)});
-                    }
-                    printTable(hIsi, rIsi);
-                    cout << "\n";
-                }
-
-                cout << "=== KARTU TERSEDIA ===\n";
-                vector<string> hK = {"No", "Nama Kartu", "Class", "Cost"};
-                vector<vector<string>> rK;
-                for (int i = 0; i < (int)tersedia.size(); i++) {
-                    rK.push_back({to_string(i + 1), tersedia[i].name, tersedia[i].cardClass, to_string(tersedia[i].cost)});
-                }
-                printTable(hK, rK);
-
-                cout << "  [0] Selesai & Simpan\n";
-                int kartuPilih = readInt("  Pilih nomor kartu: ");
-                if (kartuPilih == 0) break;
-                
-                if (kartuPilih < 1 || kartuPilih > (int)tersedia.size()) {
-                    cout << "  [!] Nomor tidak valid.\n";
-                    tungguEnter(); continue;
-                }
-
-                int qty = readInt("  Masukkan jumlah: ");
-                if (qty < 1 || qty > 4) {
-                    cout << " [!] Minimal 1 kartu dan max 4 kartu!\n";
-                    tungguEnter(); continue;
-
-                }
-                if (totalBaru + qty > 40) {
-                    cout << "  [!] Slot tidak cukup!\n";
-                    tungguEnter(); continue;
-                }
-
-                // Cek duplikat
-                bool ketemu = false;
-                for (auto& existingCard : deckTerpilih->cards) {
-                    if (existingCard.cardId == tersedia[kartuPilih-1].id) {
-                        if (existingCard.qty + qty > 4) {
-                            cout << "  [!] Maksimal 4 kartu sejenis per dek.\n";
-                            ketemu = true;
-                            break;
-                        }
-                        existingCard.qty += qty;
-                        totalBaru += qty;
-                        cout << "  [+] '" << tersedia[kartuPilih-1].name << "' ditambah " << qty 
-                            << ". Total jenis ini: " << existingCard.qty << "\n";
-                        ketemu = true;
-                        break;
-                    }
-                }
-                
-                if (!ketemu) {
-                    deckTerpilih->cards.push_back({tersedia[kartuPilih-1].id, qty});
-                    totalBaru += qty;
-                    cout << "  [+] '" << tersedia[kartuPilih-1].name << "' ditambahkan (" << qty << " kartu).\n";
-                }
-                
-                tungguEnter();
-            }
-            deckTerpilih->status = (totalBaru == 40) ? "final" : "draft";
-            cout << "  [+] Isi dek berhasil diperbarui!\n";
+            tambahKartuDek(deckTerpilih, heroes, plants, zombies);
+            decks = loadDeckCSV("deck.csv");
+            loadDeckCardsCSV("deckCard.csv", decks);
             break;
         }
         case 3: {

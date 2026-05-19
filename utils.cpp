@@ -24,6 +24,26 @@ int readInt(const string& prompt) {
     }
 }
 
+int readInt(const string& prompt, int minVal, int maxVal) {
+    int val;
+    while (true) {
+        cout << prompt;
+        if (cin >> val) {
+            if (val >= minVal && val <= maxVal) {
+                cin.ignore(1000, '\n');
+                return val;
+            }
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "  [!] Input harus antara " << minVal << "-" << maxVal << ". Coba lagi.\n";
+        } else {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "  [!] Input harus berupa angka. Coba lagi.\n";
+        }
+    }
+}
+
 string readString(const string& prompt) {
     string input;
     while (true) {
@@ -140,4 +160,19 @@ string toLower(string str) {
     transform(str.begin(), str.end(), str.begin(), 
               [](unsigned char c) { return tolower(c); });
     return str;
+}
+
+bool maksJumlahTag(const vector<string>& tags, int idx) {
+    // Base case: selesai iterasi
+    if (idx >= (int)tags.size()) {
+        return true;
+    }
+    
+    // Base case: sudah lebih dari 5
+    if (idx >= 5) {
+        return false;
+    }
+    
+    // Recursive: lanjut ke index berikutnya
+    return maksJumlahTag(tags, idx + 1);
 }

@@ -24,4 +24,4 @@ id,name,rarity,cardSet,cost,class,category,tribes,strength,health,traits,effects
 23,sunflower,common,-,1,solar,fighter,flower,0,-,team-up,-,start of turn: you get +1 sun this turn
 24,solar-winds,super-rare,galactic,3,solar,environment,-,-,-,-,make,end of turn: make a sunflower here
 25,aloesaurus,legendary,triassic,5,solar,fighter,cactus|animal,4,-,-,dino-roar|heal,dino-roar: heal all plants and plant hero for 1
-26,admiral navy bean,rare,premium,1,smarty,fighter,bean,1,-,team-up|amphibious,-,When you play a bean, do 2 damage to the zombie hero
+26,admiral navy bean,rare,premium,1,smarty,fighter,bean,1,-,team-up|amphibious,-,When you play a bean

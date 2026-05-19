@@ -389,9 +389,9 @@ void menuTambah() {
     int pilihSet = tampilMenu("  Pilih Card Set:", CARD_SET, 5);
     c.cardSet    = CARD_SET[pilihSet - 1];
 
-    c.cost     = readInt("  Cost     : ");
-    c.strength = readInt("  Strength (-1 jika tidak ada): ");
-    c.health   = readInt("  Health   (-1 jika tidak ada): ");
+    c.cost     = readInt("  Cost     : ", 0, 20);
+    c.strength = readInt("  Strength (-1 jika tidak ada): ", -1, 20);
+    c.health   = readInt("  Health   (-1 jika tidak ada): ", -1, 20);
 
     while (true) {
         if (pilihanTeam == 1)
@@ -417,7 +417,7 @@ void menuTambah() {
         vector<string> globalTraits = tampilMenuMulti("  Pilih Global Traits (MAX 5, 0 = selesai):", GLOBAL_TRAITS, 8);
         traits.insert(traits.end(), globalTraits.begin(), globalTraits.end());
 
-        if (traits.size() <= 5) {
+        if (maksJumlahTag(traits, 0)) {
             c.tags.traits = traits;
             break;
         } else {
@@ -429,7 +429,7 @@ void menuTambah() {
     while (true) {
         c.tags.effects = tampilMenuMulti("  Pilih Effects (MAX 5, 0 = selesai) :", EFFECTS, 15);
 
-        if (c.tags.effects.size() <= 5) {
+        if (maksJumlahTag(c.tags.effects,0)) {
             break;
         } else {
             cout << "[!] Total maksimal Effects hanya 5 .\n";
