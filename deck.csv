@@ -6,3 +6,4 @@ id, ownerId, deckName, isPlantDeck, heroId, status
 5,2,r,0,14,draft
 6,2,Yah,1,7,Ready
 7,2,Z-Mech is Op,0,20,draft
+8,2,eer,1,2,draft
